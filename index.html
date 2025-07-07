@@ -32,7 +32,8 @@
       .then(data => {
         const container = document.getElementById("posts");
 
-        data.forEach(row => {
+         data.forEach((row, index) => {
+          const postId = index + 1; // start from 1
           const timestamp = row["Timestamp"];
           const name = row["Tên của bạn (có thể ẩn danh)"];
           const content = row["Nội dung"];
@@ -65,11 +66,11 @@
           const post = document.createElement("div");
           post.className = "post";
           post.innerHTML = `
+            <h2>#${postId}</h2>
             <h4>${timestamp}</h4>
-            <p><strong>${name}</strong></p>
+            <p><strong>Người đăng: ${name}</strong></p>
             <p>${content}</p>
             ${imagesHtml}
-            <hr>
           `;
 
           container.appendChild(post);
