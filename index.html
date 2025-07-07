@@ -56,8 +56,8 @@
               }
 
               if (fileId) {
-                const imageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-                imagesHtml += `<img src="${imageUrl}" style="max-width:100%; margin-top:10px; border-radius:8px;" alt="ảnh" />`;
+                const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+                imagesHtml += `<iframe src="${embedUrl}" width="100%" height="400" style="margin-top:10px; border:none;" allow="autoplay"></iframe>`;
               }
             });
           }
