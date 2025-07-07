@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>CFS administrator</title>
+  <style>
+    .post {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+    .post img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 10px;
+    }
+    html{
+      font-family: Arial, Helvetica;
+      background-color: bisque;
+    }
+  </style>
+</head>
+<body>
+  <h1>Danh sách bài viết</h1>
+  <div id="posts"></div>
+
+  <script>
+    fetch("https://opensheet.elk.sh/1kyJb0r4apTWg1R7CJAp_Fyj6BGPGC-qR5WAxZvsIq00/Form+Responses+1")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("posts");
+
+        data.forEach(row => {
+          const timestamp = row["Timestamp"];
+          const name = row["Tên của bạn (có thể ẩn danh)"];
+          const content = row["Nội dung"];
+          const rawLinks = row["Hình ảnh đính kèm"];
+
+          let imagesHtml = "";
+
+          if (rawLinks) {
+            const links = rawLinks.split(",").map(link => link.trim());
+
+            links.forEach(link => {
+              let fileId = "";
+
+              const match1 = link.match(/\/d\/(.+?)\//);
+              const match2 = link.match(/open\?id=([^&]+)/);
+
+              if (match1) {
+                fileId = match1[1];
+              } else if (match2) {
+                fileId = match2[1];
+              }
+
+              if (fileId) {
+                const imageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                imagesHtml += `<img src="${imageUrl}" style="max-width:100%; margin-top:10px; border-radius:8px;" alt="ảnh" />`;
+              }
+            });
+          }
+
+          const post = document.createElement("div");
+          post.className = "post";
+          post.innerHTML = `
+            <h4>${timestamp}</h4>
+            <p><strong>${name}</strong></p>
+            <p>${content}</p>
+            ${imagesHtml}
+            <hr>
+          `;
+
+          container.appendChild(post);
+        });
+      });
+  </script>
+</body>
+</html>
